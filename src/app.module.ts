@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ProductService } from './core/application/services/product/product.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './core/domain/models/User';
+import { UserService } from './core/application/services/user/user.service';
+import { UserController } from './presentation/controllers/user/user.controller';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { User } from './core/domain/models/User';
     }),
     SequelizeModule.forFeature([User]),
   ],
-  controllers: [AppController],
-  providers: [AppService, ProductService],
+  controllers: [UserController],
+  providers: [ProductService, UserService],
 })
 export class AppModule {}
