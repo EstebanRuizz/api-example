@@ -1,0 +1,27 @@
+Presentation:
+    HttpControllers
+    Middlewares
+    Guards
+    Interceptors
+
+infrastructure:
+    Persistence
+        dbContext
+        configDb with ORM
+    Smtp
+        config Smtp
+    Logger
+
+core:
+    application:
+        DTOs
+        interfaces
+        Enums
+        Services
+        Features CQRS
+        Behaviors
+        Mappings
+        Exceptions
+        Wrappers
+    domain:
+        models: user, product, shippings
