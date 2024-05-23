@@ -14,11 +14,15 @@ export class UserService {
     return this.userModel.findAll();
   }
 
-  findOne(id: number): Promise<User> {
+  findOne(id: string): Promise<User> {
     return this.userModel.findByPk(id);
   }
 
-  async remove(id: number): Promise<void> {
+  public async findByEmail(email: string): Promise<User | null> {
+    return this.userModel.findOne({ where: { email } });
+  }
+
+  async remove(id: string): Promise<void> {
     const user = await this.findOne(id);
     if (user) {
       await user.destroy();
@@ -29,6 +33,7 @@ export class UserService {
     const user: User = this.userModel.build({
       name: userDTO.name,
       email: userDTO.email,
+      password: userDTO.password,
     });
     return user.save();
   }
