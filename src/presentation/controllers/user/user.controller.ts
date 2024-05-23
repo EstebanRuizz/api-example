@@ -6,15 +6,18 @@ import {
   Param,
   Delete,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UserDTO } from '../../../core/application/DTO/UserDTO';
 import { UserService } from '../../../core/application/services/user/user.service';
 import { User } from '../../../core/domain/models/User';
+import { AuthGuard } from 'src/presentation/guards/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(AuthGuard)
   @Get()
   findAll(): Promise<User[]> {
     return this.userService.findAll();
@@ -22,7 +25,7 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
   @Post()
@@ -32,6 +35,6 @@ export class UserController {
 
   @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }
