@@ -1,16 +1,27 @@
 import { Column, Model, Table } from 'sequelize-typescript';
+import { DataTypes } from 'sequelize';
 
 @Table
 export class User extends Model<User> {
   @Column({
-    autoIncrement: true,
+    type: DataTypes.UUIDV4,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   })
-  id: number;
+  id: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   name: string;
 
-  @Column
+  @Column({
+    allowNull: false,
+  })
   email: string;
+
+  @Column({
+    allowNull: false,
+  })
+  password: string;
 }
