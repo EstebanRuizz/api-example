@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Delete,
-  ValidationPipe,
   UseGuards,
 } from '@nestjs/common';
 import { UserDTO } from '../../../core/application/DTO/UserDTO';

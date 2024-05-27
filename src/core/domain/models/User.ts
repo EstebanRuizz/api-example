@@ -1,5 +1,6 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { Column, Model, Table, ForeignKey } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
+import { Role } from './Role';
 
 @Table
 export class User extends Model<User> {
@@ -24,4 +25,11 @@ export class User extends Model<User> {
     allowNull: false,
   })
   password: string;
+
+  @ForeignKey(() => Role)
+  @Column({
+    type: DataTypes.UUIDV4,
+    allowNull: false,
+  })
+  roleFK: string;
 }

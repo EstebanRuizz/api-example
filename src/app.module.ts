@@ -10,19 +10,22 @@ import { AuthController } from './presentation/controllers/auth/auth.controller'
 import { AuthService } from './core/application/services/auth/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './infrastructure/auth/constants';
+import { RoleController } from './presentation/controllers/role/role.controller';
+import { RolesService } from './core/application/services/roles/roles.service';
+import { Role } from './core/domain/models/Role';
 
 @Module({
   imports: [
     SequelizeModule.forRoot(SqliteConfig.getSequelizeModuleOptions()),
-    SequelizeModule.forFeature([User]),
+    SequelizeModule.forFeature([User, Role]),
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  controllers: [UserController, AuthController],
-  providers: [ProductService, UserService, AuthService],
+  controllers: [UserController, AuthController, RoleController],
+  providers: [ProductService, UserService, AuthService, RolesService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

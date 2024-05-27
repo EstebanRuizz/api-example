@@ -1,6 +1,7 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsUUID,
   Matches,
   MaxLength,
   MinLength,
@@ -26,4 +27,8 @@ export class UserDTO {
     message: 'password must contain only letters including tildes and spaces',
   })
   password: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  roleFK: string;
 }

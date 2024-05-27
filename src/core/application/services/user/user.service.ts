@@ -34,6 +34,7 @@ export class UserService {
       name: userDTO.name,
       email: userDTO.email,
       password: userDTO.password,
+      roleFK: userDTO.roleFK,
     });
     return user.save();
   }

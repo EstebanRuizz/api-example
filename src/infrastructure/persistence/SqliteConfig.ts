@@ -1,4 +1,5 @@
 import { SequelizeModuleOptions } from '@nestjs/sequelize';
+import { Role } from 'src/core/domain/models/Role';
 import { User } from 'src/core/domain/models/User';
 
 export class SqliteConfig {
@@ -6,7 +7,7 @@ export class SqliteConfig {
     return {
       dialect: 'sqlite',
       storage: 'database.sqlite',
-      models: [User],
+      models: [User, Role],
       autoLoadModels: true,
       synchronize: true,
     };
