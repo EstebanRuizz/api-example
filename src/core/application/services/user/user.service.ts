@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from '../../../domain/models/User';
+import { UserConfig } from '../../../../infrastructure/persistence/Sqlite/config/UserConfig';
 import { UserDTO } from '../../DTO/UserDTO';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User)
-    private userModel: typeof User,
+    @InjectModel(UserConfig)
+    private userModel: typeof UserConfig,
   ) {}
 
-  findAll(): Promise<User[]> {
+  findAll(): Promise<UserConfig[]> {
     return this.userModel.findAll();
   }
 
-  findOne(id: string): Promise<User> {
+  findOne(id: string): Promise<UserConfig> {
     return this.userModel.findByPk(id);
   }
 
-  public async findByEmail(email: string): Promise<User | null> {
+  public async findByEmail(email: string): Promise<UserConfig | null> {
     return this.userModel.findOne({ where: { email } });
   }
 
@@ -29,8 +29,8 @@ export class UserService {
     }
   }
 
-  public async create(userDTO: UserDTO): Promise<User> {
-    const user: User = this.userModel.build({
+  public async create(userDTO: UserDTO): Promise<UserConfig> {
+    const user: UserConfig = this.userModel.build({
       name: userDTO.name,
       email: userDTO.email,
       password: userDTO.password,

@@ -1,9 +1,10 @@
 import { Column, Model, Table, ForeignKey } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
-import { Role } from './Role';
+import { RoleConfig } from './RoleConfig';
+import { IUser } from 'src/core/domain/models/IUser';
 
 @Table
-export class User extends Model<User> {
+export class UserConfig extends Model<UserConfig> implements IUser {
   @Column({
     type: DataTypes.UUIDV4,
     defaultValue: DataTypes.UUIDV4,
@@ -26,7 +27,7 @@ export class User extends Model<User> {
   })
   password: string;
 
-  @ForeignKey(() => Role)
+  @ForeignKey(() => RoleConfig)
   @Column({
     type: DataTypes.UUIDV4,
     allowNull: false,

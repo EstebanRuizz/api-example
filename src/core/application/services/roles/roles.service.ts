@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Role } from '../../../domain/models/Role';
 import { RoleDTO } from '../../DTO/RoleDTO';
+import { RoleConfig } from 'src/infrastructure/persistence/Sqlite/config/RoleConfig';
 
 @Injectable()
 export class RolesService {
-  constructor(
-    @InjectModel(Role)
-    private roleModel: typeof Role,
+  public constructor(
+    @InjectModel(RoleConfig)
+    private roleModel: typeof RoleConfig,
   ) {}
 
-  public async getAll(): Promise<Role[]> {
+  public async getAll(): Promise<RoleConfig[]> {
     return this.roleModel.findAll();
   }
 
-  public async findOne(id: string): Promise<Role> {
+  public async findOne(id: string): Promise<RoleConfig> {
     return this.roleModel.findByPk(id);
   }
 
@@ -25,8 +25,8 @@ export class RolesService {
     }
   }
 
-  public async create(roleDTO: RoleDTO): Promise<Role> {
-    const role: Role = this.roleModel.build({
+  public async create(roleDTO: RoleDTO): Promise<RoleConfig> {
+    const role: RoleConfig = this.roleModel.build({
       name: roleDTO.name,
       description: roleDTO.description,
     });

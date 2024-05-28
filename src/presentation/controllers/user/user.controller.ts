@@ -9,26 +9,35 @@ import {
 } from '@nestjs/common';
 import { UserDTO } from '../../../core/application/DTO/UserDTO';
 import { UserService } from '../../../core/application/services/user/user.service';
-import { User } from '../../../core/domain/models/User';
+import { UserConfig } from '../../../infrastructure/persistence/Sqlite/config/UserConfig';
 import { AuthGuard } from 'src/presentation/guards/auth/auth.guard';
+import { HttpRoutesService } from 'src/core/application/services/http-routes/http-routes.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly httpRoutes: HttpRoutesService,
+  ) {}
+
+  @Get('httpRoutes')
+  public getHttpRoutes(): object {
+    return this.httpRoutes.getRoutes();
+  }
 
   @UseGuards(AuthGuard)
   @Get()
-  findAll(): Promise<User[]> {
+  findAll(): Promise<UserConfig[]> {
     return this.userService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
+  findOne(@Param('id') id: string): Promise<UserConfig> {
     return this.userService.findOne(id);
   }
 
   @Post()
-  create(@Body() userDTO: UserDTO): Promise<User> {
+  create(@Body() userDTO: UserDTO): Promise<UserConfig> {
     return this.userService.create(userDTO);
   }
 

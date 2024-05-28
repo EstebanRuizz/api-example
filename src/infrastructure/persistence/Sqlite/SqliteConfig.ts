@@ -1,13 +1,13 @@
 import { SequelizeModuleOptions } from '@nestjs/sequelize';
-import { Role } from 'src/core/domain/models/Role';
-import { User } from 'src/core/domain/models/User';
+import { RoleConfig } from './config/RoleConfig';
+import { UserConfig } from './config/UserConfig';
 
 export class SqliteConfig {
   public static getSequelizeModuleOptions(): SequelizeModuleOptions {
     return {
       dialect: 'sqlite',
       storage: 'database.sqlite',
-      models: [User, Role],
+      models: [RoleConfig, UserConfig],
       autoLoadModels: true,
       synchronize: true,
     };

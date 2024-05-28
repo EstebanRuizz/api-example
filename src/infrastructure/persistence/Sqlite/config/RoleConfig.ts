@@ -1,8 +1,9 @@
 import { Column, Model, Table } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
+import { IRole } from 'src/core/domain/models/IRole';
 
 @Table
-export class Role extends Model<Role> {
+export class RoleConfig extends Model<RoleConfig> implements IRole {
   @Column({
     type: DataTypes.UUIDV4,
     defaultValue: DataTypes.UUIDV4,
