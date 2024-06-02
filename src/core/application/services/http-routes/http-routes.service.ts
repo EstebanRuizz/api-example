@@ -1,4 +1,5 @@
 import { HttpServer, INestApplication, Injectable } from '@nestjs/common';
+import { HttpRoutesDTO } from '../../DTO/inner/HttpRoutesDTO';
 
 @Injectable()
 export class HttpRoutesService {
@@ -8,20 +9,21 @@ export class HttpRoutesService {
     this.app = app;
   }
 
-  public getRoutes(): string[] {
+  public getRoutes(): HttpRoutesDTO[] {
     const server: HttpServer = this.app.getHttpServer();
     const router = server['_events'].request._router;
 
     const routes = [];
     router.stack.forEach((middleware) => {
       if (middleware.route) {
-        // Routes registered directly on the app
+        const entity: string[] = middleware.route.path.split('/');
+        entity.shift();
         routes.push({
           path: middleware.route.path,
           method: Object.keys(middleware.route.methods)[0].toUpperCase(),
+          entityName: entity.shift(),
         });
       } else if (middleware.name === 'router') {
-        // Router middleware (nested routes)
         middleware.handle.stack.forEach((handler) => {
           const route = handler.route;
           route &&
@@ -33,7 +35,6 @@ export class HttpRoutesService {
       }
     });
 
-    return routes;
+    return routes as HttpRoutesDTO[];
   }
 }
-

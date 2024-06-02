@@ -1,7 +1,8 @@
-import { RolesService } from './../../../core/application/services/roles/roles.service';
+
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { RoleDTO } from 'src/core/application/DTO/RoleDTO';
 import { RoleConfig } from '../../../infrastructure/persistence/Sqlite/config/RoleConfig';
+import { RolesService } from 'src/core/application/services/roles/roles.service';
 
 @Controller('role')
 export class RoleController {

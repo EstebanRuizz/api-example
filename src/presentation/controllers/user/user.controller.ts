@@ -12,16 +12,19 @@ import { UserService } from '../../../core/application/services/user/user.servic
 import { UserConfig } from '../../../infrastructure/persistence/Sqlite/config/UserConfig';
 import { AuthGuard } from 'src/presentation/guards/auth/auth.guard';
 import { HttpRoutesService } from 'src/core/application/services/http-routes/http-routes.service';
+import { EntitiesService } from 'src/core/application/services/entities/entities.service';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly httpRoutes: HttpRoutesService,
+    private readonly entitiesService: EntitiesService,
   ) {}
 
   @Get('httpRoutes')
-  public getHttpRoutes(): object {
+  public async getHttpRoutes(): Promise<object> {
+    await this.entitiesService.syncHttpRoutes();
     return this.httpRoutes.getRoutes();
   }
 

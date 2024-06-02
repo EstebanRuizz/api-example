@@ -14,24 +14,43 @@ import { RolesService } from './core/application/services/roles/roles.service';
 import { UserConfig } from './infrastructure/persistence/Sqlite/config/UserConfig';
 import { RoleConfig } from './infrastructure/persistence/Sqlite/config/RoleConfig';
 import { HttpRoutesService } from './core/application/services/http-routes/http-routes.service';
+import { EntityByRoleController } from './presentation/controllers/entity-by-role/entity-by-role.controller';
+import { EntitiesByRoleConfig } from './infrastructure/persistence/Sqlite/config/EntitiesByRoleConfig';
+import { EntitiesByRoleService } from './core/application/services/entities-by-role/entities-by-role.service';
+import { EntitiesService } from './core/application/services/entities/entities.service';
+import { EntitiesConfig } from './infrastructure/persistence/Sqlite/config/EntitiesConfig';
+import { EntityController } from './presentation/controllers/entity/entity.controller';
 
 @Module({
   imports: [
     SequelizeModule.forRoot(SqliteConfig.getSequelizeModuleOptions()),
-    SequelizeModule.forFeature([UserConfig, RoleConfig]),
+    SequelizeModule.forFeature([
+      UserConfig,
+      RoleConfig,
+      EntitiesByRoleConfig,
+      EntitiesConfig,
+    ]),
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  controllers: [UserController, AuthController, RoleController],
+  controllers: [
+    UserController,
+    EntityController,
+    AuthController,
+    RoleController,
+    EntityByRoleController,
+  ],
   providers: [
     ProductService,
     UserService,
     AuthService,
     RolesService,
     HttpRoutesService,
+    EntitiesByRoleService,
+    EntitiesService,
   ],
 })
 export class AppModule implements NestModule {

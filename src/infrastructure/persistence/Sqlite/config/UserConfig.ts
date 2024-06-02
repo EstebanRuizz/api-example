@@ -33,4 +33,10 @@ export class UserConfig extends Model<UserConfig> implements IUser {
     allowNull: false,
   })
   roleFK: string;
+
+  @Column({
+    type: DataTypes.UUIDV4,
+    allowNull: true,
+  })
+  jwtSessionId: string;
 }
