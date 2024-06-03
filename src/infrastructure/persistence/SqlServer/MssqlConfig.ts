@@ -5,6 +5,7 @@ import { EntitiesConfig } from './../Sqlite/config/EntitiesConfig';
 import { EntitiesByRoleConfig } from './../Sqlite/config/EntitiesByRoleConfig';
 import { ConfigService } from '@nestjs/config';
 import { Dialect } from 'sequelize';
+import { UserJWTSessionConfig } from '../Sqlite/config/UserJWTSessionConfig';
 
 export class MssqlConfig {
   public static getSequelizeModuleOptions(): SequelizeModuleOptions {
@@ -22,7 +23,13 @@ export class MssqlConfig {
         'external_database_autoLoadModels',
       ),
       synchronize: configService.get<boolean>('external_database_synchronize'),
-      models: [EntitiesByRoleConfig, EntitiesConfig, RoleConfig, UserConfig],
+      models: [
+        UserJWTSessionConfig,
+        UserConfig,
+        RoleConfig,
+        EntitiesByRoleConfig,
+        EntitiesConfig,
+      ],
     };
   }
 }

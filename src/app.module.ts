@@ -31,6 +31,7 @@ import { UserJWTSessionConfig } from './infrastructure/persistence/Sqlite/config
       ...SqliteConfig.getSequelizeModuleOptions(),
       models: [
         UserJWTSessionConfig,
+        UserConfig,
         RoleConfig,
         EntitiesByRoleConfig,
         EntitiesConfig,
@@ -38,6 +39,7 @@ import { UserJWTSessionConfig } from './infrastructure/persistence/Sqlite/config
     }),
     SequelizeModule.forRoot(MssqlConfig.getSequelizeModuleOptions()),
     SequelizeModule.forFeature([
+      UserJWTSessionConfig,
       UserConfig,
       RoleConfig,
       EntitiesByRoleConfig,

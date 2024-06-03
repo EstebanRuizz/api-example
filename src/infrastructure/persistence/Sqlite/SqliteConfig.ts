@@ -3,6 +3,7 @@ import { RoleConfig } from './config/RoleConfig';
 import { UserJWTSessionConfig } from './config/UserJWTSessionConfig';
 import { EntitiesByRoleConfig } from './config/EntitiesByRoleConfig';
 import { EntitiesConfig } from './config/EntitiesConfig';
+import { UserConfig } from './config/UserConfig';
 
 export class SqliteConfig {
   public static getSequelizeModuleOptions(): SequelizeModuleOptions {
@@ -11,6 +12,7 @@ export class SqliteConfig {
       storage: 'database.sqlite',
       models: [
         UserJWTSessionConfig,
+        UserConfig,
         RoleConfig,
         EntitiesByRoleConfig,
         EntitiesConfig,
