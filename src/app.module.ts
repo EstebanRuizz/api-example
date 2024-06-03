@@ -20,16 +20,30 @@ import { EntitiesByRoleService } from './core/application/services/entities-by-r
 import { EntitiesService } from './core/application/services/entities/entities.service';
 import { EntitiesConfig } from './infrastructure/persistence/Sqlite/config/EntitiesConfig';
 import { EntityController } from './presentation/controllers/entity/entity.controller';
+import { ConfigModule } from '@nestjs/config';
+import { MssqlConfig } from './infrastructure/persistence/SqlServer/MssqlConfig';
+import { UserJWTSessionConfig } from './infrastructure/persistence/Sqlite/config/UserJWTSessionConfig';
 
 @Module({
   imports: [
-    SequelizeModule.forRoot(SqliteConfig.getSequelizeModuleOptions()),
+    ConfigModule.forRoot({ isGlobal: true }),
+    SequelizeModule.forRoot({
+      ...SqliteConfig.getSequelizeModuleOptions(),
+      models: [
+        UserJWTSessionConfig,
+        RoleConfig,
+        EntitiesByRoleConfig,
+        EntitiesConfig,
+      ],
+    }),
+    SequelizeModule.forRoot(MssqlConfig.getSequelizeModuleOptions()),
     SequelizeModule.forFeature([
       UserConfig,
       RoleConfig,
       EntitiesByRoleConfig,
       EntitiesConfig,
     ]),
+
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,

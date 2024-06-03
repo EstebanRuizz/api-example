@@ -8,19 +8,19 @@ export class UserJWTSessionConfig
   implements IUserJWTSession
 {
   @Column({
-    type: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
     allowNull: false,
   })
   jwtSessionId: string;
 
   @Column({
-    type: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
     allowNull: false,
   })
   userId: string;
 
   @Column({
-    type: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
     allowNull: false,
   })
   roleFK: string;

@@ -10,22 +10,22 @@ export class EntitiesByRoleConfig
   implements IEntitiesByRole
 {
   @Column({
-    type: DataTypes.UUIDV4,
-    defaultValue: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUID,
     primaryKey: true,
   })
   id: string;
 
   @ForeignKey(() => RoleConfig)
   @Column({
-    type: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
     allowNull: false,
   })
   roleFK: string;
 
   @ForeignKey(() => EntitiesConfig)
   @Column({
-    type: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
     allowNull: false,
   })
   entityFK: string;

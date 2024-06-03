@@ -6,8 +6,8 @@ import { IUser } from 'src/core/domain/models/IUser';
 @Table
 export class UserConfig extends Model<UserConfig> implements IUser {
   @Column({
-    type: DataTypes.UUIDV4,
-    defaultValue: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUID,
     primaryKey: true,
   })
   id: string;
@@ -29,13 +29,13 @@ export class UserConfig extends Model<UserConfig> implements IUser {
 
   @ForeignKey(() => RoleConfig)
   @Column({
-    type: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
     allowNull: false,
   })
   roleFK: string;
 
   @Column({
-    type: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
     allowNull: true,
   })
   jwtSessionId: string;

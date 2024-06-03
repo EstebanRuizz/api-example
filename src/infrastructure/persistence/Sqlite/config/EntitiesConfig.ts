@@ -5,8 +5,8 @@ import { IEntities } from 'src/core/domain/models/IEntities';
 @Table
 export class EntitiesConfig extends Model<EntitiesConfig> implements IEntities {
   @Column({
-    type: DataTypes.UUIDV4,
-    defaultValue: DataTypes.UUIDV4,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUID,
     primaryKey: true,
   })
   id: string;
