@@ -26,7 +26,9 @@ export class EntitiesService {
       };
       try {
         await this.entityModel.create(entity);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 

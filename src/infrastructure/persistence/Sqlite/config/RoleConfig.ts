@@ -1,14 +1,21 @@
-import { Column, Model, Table } from 'sequelize-typescript';
-import { DataTypes } from 'sequelize';
+import {
+  Model,
+  Index,
+  Table,
+  Column,
+  DataType,
+  HasMany,
+  BelongsTo,
+  ForeignKey,
+  PrimaryKey,
+  Default,
+} from 'sequelize-typescript';
 import { IRole } from 'src/core/domain/models/IRole';
 
 @Table
 export class RoleConfig extends Model<RoleConfig> implements IRole {
-  @Column({
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUID,
-    primaryKey: true,
-  })
+  @Default(DataType.UUIDV4)
+  @Column({ primaryKey: true, type: DataType.UUIDV4 })
   id: string;
 
   @Column({

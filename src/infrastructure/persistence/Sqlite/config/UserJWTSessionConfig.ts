@@ -1,6 +1,16 @@
 import { IUserJWTSession } from 'src/core/domain/models/IUserJWTSession';
-import { Column, Model, Table } from 'sequelize-typescript';
-import { DataTypes } from 'sequelize';
+import {
+  Model,
+  Index,
+  Table,
+  Column,
+  DataType,
+  HasMany,
+  BelongsTo,
+  ForeignKey,
+  PrimaryKey,
+  Default,
+} from 'sequelize-typescript';
 
 @Table
 export class UserJWTSessionConfig
@@ -8,19 +18,19 @@ export class UserJWTSessionConfig
   implements IUserJWTSession
 {
   @Column({
-    type: DataTypes.UUID,
+    type: DataType.UUID,
     allowNull: false,
   })
   jwtSessionId: string;
 
   @Column({
-    type: DataTypes.UUID,
+    type: DataType.UUID,
     allowNull: false,
   })
   userId: string;
 
   @Column({
-    type: DataTypes.UUID,
+    type: DataType.UUID,
     allowNull: false,
   })
   roleFK: string;

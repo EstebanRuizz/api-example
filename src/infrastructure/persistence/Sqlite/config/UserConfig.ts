@@ -1,15 +1,22 @@
-import { Column, Model, Table, ForeignKey } from 'sequelize-typescript';
-import { DataTypes } from 'sequelize';
+import {
+  Model,
+  Index,
+  Table,
+  Column,
+  DataType,
+  HasMany,
+  BelongsTo,
+  ForeignKey,
+  PrimaryKey,
+  Default,
+} from 'sequelize-typescript';
 import { RoleConfig } from './RoleConfig';
 import { IUser } from 'src/core/domain/models/IUser';
 
 @Table
 export class UserConfig extends Model<UserConfig> implements IUser {
-  @Column({
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUID,
-    primaryKey: true,
-  })
+  @Default(DataType.UUIDV4)
+  @Column({ primaryKey: true, type: DataType.UUIDV4 })
   id: string;
 
   @Column({
@@ -29,13 +36,13 @@ export class UserConfig extends Model<UserConfig> implements IUser {
 
   @ForeignKey(() => RoleConfig)
   @Column({
-    type: DataTypes.UUID,
+    type: DataType.UUID,
     allowNull: false,
   })
   roleFK: string;
 
   @Column({
-    type: DataTypes.UUID,
+    type: DataType.UUID,
     allowNull: true,
   })
   jwtSessionId: string;

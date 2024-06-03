@@ -24,8 +24,8 @@ export class MssqlConfig {
       ),
       synchronize: configService.get<boolean>('external_database_synchronize'),
       models: [
-        UserJWTSessionConfig,
         UserConfig,
+        UserJWTSessionConfig,
         RoleConfig,
         EntitiesByRoleConfig,
         EntitiesConfig,
