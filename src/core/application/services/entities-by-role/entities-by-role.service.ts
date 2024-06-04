@@ -53,6 +53,6 @@ export class EntitiesByRoleService {
   }
 
   public async findByExpression(where: WhereOptions): Promise<object[]> {
-    return this.entitiesConfig.findAll({ where });
+    return this.entitiesByRoleConfig.findAll({ where });
   }
 }
