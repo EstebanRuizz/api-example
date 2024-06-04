@@ -9,14 +9,19 @@ import { EntitiesByRoleDTO } from '../../DTO/EntitiesByRole';
 import { EntitiesByRoleService } from '../entities-by-role/entities-by-role.service';
 import { EntitiesByRoleConfig } from 'src/infrastructure/persistence/Sqlite/config/EntitiesByRoleConfig';
 import { WhereOptions } from 'sequelize';
+import { UserService } from '../user/user.service';
+import { UserDTO } from '../../DTO/UserDTO';
+import { UserConfig } from 'src/infrastructure/persistence/Sqlite/config/UserConfig';
 
 @Injectable()
 export class InfrastructureService {
   private role: RoleConfig;
+  private user: UserConfig;
   private entities: EntitiesConfig[] = [];
   private entitiesByRole: EntitiesByRoleConfig[] = [];
 
   public constructor(
+    private readonly userService: UserService,
     private readonly entitiesService: EntitiesService,
     private readonly externalDBRoles: ExternalDBRolesService,
     private readonly entitiesByRoleService: EntitiesByRoleService,
@@ -24,14 +29,34 @@ export class InfrastructureService {
 
   public async createBaseInfrastructure(infrastructureDTO: InfrastructureDTO) {
     await this.createAdminRole(infrastructureDTO);
+    await this.createUser(infrastructureDTO);
     await this.syncEndPoints();
     await this.grantPermissionsToAdminRole();
 
     return {
+      user: this.user,
       role: this.role,
       entities: this.entities,
       entitiesByRole: this.entitiesByRole,
     };
+  }
+
+  private async createUser(infrastructureDTO: InfrastructureDTO) {
+    const user: UserConfig[] = await this.userService.findByExpression({
+      email: infrastructureDTO.userEmail,
+    });
+
+    if (!user) {
+      const userDTO: UserDTO = {
+        name: infrastructureDTO.userEmail,
+        email: infrastructureDTO.userEmail,
+        password: infrastructureDTO.userPassword,
+        roleFK: this.role.id,
+      };
+      this.user = await this.userService.create(userDTO);
+    } else {
+      this.user = user.shift();
+    }
   }
 
   private async grantPermissionsToAdminRole() {
@@ -40,8 +65,20 @@ export class InfrastructureService {
       entityFK: e.id,
     }));
 
-    this.entitiesByRole =
-      await this.entitiesByRoleService.bulkCreate(entitiesByRoleDTOs);
+    for (const entityRole of entitiesByRoleDTOs) {
+      const expression: WhereOptions = {
+        roleFK: entityRole.roleFK,
+        entityFK: entityRole.entityFK,
+      };
+      const existingEntries =
+        await this.entitiesByRoleService.findByExpression(expression);
+
+      if (existingEntries.length === 0) {
+        await this.entitiesByRoleService.create(entityRole);
+      }
+    }
+
+    this.entitiesByRole = await this.entitiesByRoleService.getAll();
   }
 
   private async syncEndPoints() {
@@ -61,7 +98,6 @@ export class InfrastructureService {
         ),
       );
     }
-    return this.role;
   }
 
   public async findByExpression(expression: WhereOptions): Promise<object[]> {
