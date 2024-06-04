@@ -62,10 +62,14 @@ import { Dialect } from 'sequelize';
     ),
 
     SequelizeModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
       name: EnumDatabase.sqliteConnection,
-      useFactory: async () => ({
-        dialect: 'sqlite',
-        storage: 'database.sqlite',
+      useFactory: async (configService: ConfigService) => ({
+        dialect: configService.get<string>(
+          'localJWTSession_database_dialect',
+        ) as Dialect,
+        storage: configService.get<string>('localJWTSession_database_storage'),
         autoLoadModels: true,
         synchronize: true,
         models: [
