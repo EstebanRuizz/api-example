@@ -60,7 +60,7 @@ import { ExternalDBRolesService } from './core/application/services/roles/extern
     }),
   ],
   controllers: [
-    // UserController,
+    UserController,
     // EntityController,
     // AuthController,
     RoleController,
@@ -69,7 +69,7 @@ import { ExternalDBRolesService } from './core/application/services/roles/extern
   ],
   providers: [
     // ProductService,
-    // UserService,
+    UserService,
     // AuthService,
     HttpRoutesService,
     ExternalDBRolesService,
@@ -77,7 +77,7 @@ import { ExternalDBRolesService } from './core/application/services/roles/extern
     SecurityApiRolesService,
     EntitiesService,
     EntitiesByRoleService,
-    // MssqlConfig.sequelizeProvider(),
+    MssqlConfig.sequelizeProvider(),
   ],
 })
 export class AppModule implements NestModule {
