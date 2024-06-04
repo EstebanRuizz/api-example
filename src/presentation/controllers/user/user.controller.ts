@@ -30,7 +30,7 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get()
-  findAll(): Promise<UserConfig[]> {
+  public async findAll(): Promise<UserConfig[]> {
     return this.userService.findAll();
   }
 
