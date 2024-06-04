@@ -1,6 +1,7 @@
-import { Dialect } from 'sequelize';
+import { Dialect, Sequelize } from 'sequelize';
 import { ConfigService } from '@nestjs/config';
 import { SequelizeModuleOptions } from '@nestjs/sequelize';
+import { Provider } from '@nestjs/common';
 
 export class MssqlConfig {
   public static getSequelizeModuleOptions(): SequelizeModuleOptions {
@@ -16,6 +17,13 @@ export class MssqlConfig {
       database: configService.get<string>('external_database_database'),
       autoLoadModels: true,
       synchronize: true,
+    };
+  }
+
+  public static sequelizeProvider(): Provider {
+    return {
+      provide: 'SEQUELIZE',
+      useValue: new Sequelize(MssqlConfig.getSequelizeModuleOptions()),
     };
   }
 }
