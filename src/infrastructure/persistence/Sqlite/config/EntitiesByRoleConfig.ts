@@ -1,18 +1,14 @@
 import {
-  Model,
-  Index,
-  Table,
   Column,
   DataType,
-  HasMany,
-  BelongsTo,
   ForeignKey,
+  Model,
   PrimaryKey,
-  Default,
+  Table,
 } from 'sequelize-typescript';
-import { RoleConfig } from './RoleConfig';
-import { EntitiesConfig } from './EntitiesConfig';
 import { IEntitiesByRole } from 'src/core/domain/models/IEntitiesByRole';
+import { EntitiesConfig } from './EntitiesConfig';
+import { RoleConfig } from './RoleConfig';
 
 @Table
 export class EntitiesByRoleConfig

@@ -1,17 +1,13 @@
 import {
-  Model,
-  Index,
-  Table,
   Column,
   DataType,
-  HasMany,
-  BelongsTo,
   ForeignKey,
+  Model,
   PrimaryKey,
-  Default,
+  Table,
 } from 'sequelize-typescript';
-import { RoleConfig } from './RoleConfig';
 import { IUser } from 'src/core/domain/models/IUser';
+import { RoleConfig } from './RoleConfig';
 
 @Table
 export class UserConfig extends Model<UserConfig> implements IUser {

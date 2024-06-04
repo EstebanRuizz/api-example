@@ -1,14 +1,10 @@
 import {
-  Model,
-  Index,
-  Table,
   Column,
   DataType,
-  HasMany,
-  BelongsTo,
-  ForeignKey,
+  Index,
+  Model,
   PrimaryKey,
-  Default,
+  Table,
 } from 'sequelize-typescript';
 import { IEntities } from 'src/core/domain/models/IEntities';
 

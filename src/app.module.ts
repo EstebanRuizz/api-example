@@ -6,7 +6,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { ProductService } from './core/application/services/product/product.service';
 import { UserService } from './core/application/services/user/user.service';
 import { AuthService } from './core/application/services/auth/auth.service';
-import { RolesService } from './core/application/services/roles/roles.service';
 import { HttpRoutesService } from './core/application/services/http-routes/http-routes.service';
 import { EntitiesByRoleService } from './core/application/services/entities-by-role/entities-by-role.service';
 import { EntitiesService } from './core/application/services/entities/entities.service';
@@ -30,6 +29,10 @@ import { EntitiesByRoleConfig } from './infrastructure/persistence/Sqlite/config
 import { EntitiesConfig } from './infrastructure/persistence/Sqlite/config/EntitiesConfig';
 import { UserJWTSessionConfig } from './infrastructure/persistence/Sqlite/config/UserJWTSessionConfig';
 import { EnumDatabase } from './core/application/enums/EnumDatabase';
+import { InfrastructureService } from './core/application/services/infrastructure/infrastructure.service';
+import { InfrastructureController } from './presentation/controllers/infrastructure/infrastructure.controller';
+import { SecurityApiRolesService } from './core/application/services/securtity-apiroles/security-apiroles.service';
+import { ExternalDBRolesService } from './core/application/services/roles/external-db-roles.service';
 
 @Module({
   imports: [
@@ -61,16 +64,19 @@ import { EnumDatabase } from './core/application/enums/EnumDatabase';
     // EntityController,
     // AuthController,
     RoleController,
+    InfrastructureController,
     // EntityByRoleController,
   ],
   providers: [
     // ProductService,
     // UserService,
     // AuthService,
-    RolesService,
     HttpRoutesService,
-    // EntitiesByRoleService,
-    // EntitiesService,
+    ExternalDBRolesService,
+    InfrastructureService,
+    SecurityApiRolesService,
+    EntitiesService,
+    EntitiesByRoleService,
     // MssqlConfig.sequelizeProvider(),
   ],
 })

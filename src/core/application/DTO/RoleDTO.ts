@@ -17,4 +17,9 @@ export class RoleDTO {
       'Description must contain only letters including tildes and spaces',
   })
   description: string;
+
+  public constructor(name: string, description: string) {
+    this.name = name;
+    this.description = description;
+  }
 }

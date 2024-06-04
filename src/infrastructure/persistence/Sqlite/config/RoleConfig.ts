@@ -1,14 +1,9 @@
 import {
-  Model,
-  Index,
-  Table,
   Column,
   DataType,
-  HasMany,
-  BelongsTo,
-  ForeignKey,
+  Model,
   PrimaryKey,
-  Default,
+  Table,
 } from 'sequelize-typescript';
 import { IRole } from 'src/core/domain/models/IRole';
 
@@ -19,6 +14,7 @@ export class RoleConfig extends Model<RoleConfig> implements IRole {
   id: string;
 
   @Column({
+    unique: true,
     allowNull: false,
   })
   name: string;
