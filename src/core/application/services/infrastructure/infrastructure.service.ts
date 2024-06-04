@@ -45,8 +45,7 @@ export class InfrastructureService {
     const user: UserConfig[] = await this.userService.findByExpression({
       email: infrastructureDTO.userEmail,
     });
-
-    if (!user) {
+    if (!user.length) {
       const userDTO: UserDTO = {
         name: infrastructureDTO.userEmail,
         email: infrastructureDTO.userEmail,

@@ -34,28 +34,27 @@ export class EntitiesService {
         entityName: this.currentHttpRoute.entityName,
         entityRoute: this.currentHttpRoute.path,
         entityMethod: this.currentHttpRoute.method,
-        concatenatedEndPoint: [
-          `[${this.currentHttpRoute.entityName}]`,
-          `[${this.currentHttpRoute.path}]`,
-          `[${this.currentHttpRoute.method}]`,
-        ].join('-'),
+        concatenatedEndPoint: this.getEndPointAddress(),
       };
       await this.exDbAPIEntities.create(entity);
     } catch (error) {
-      console.log(error);
+      console.log('ERROR: createEndPoint()');
     }
   }
 
   private async alreadyExits(): Promise<boolean> {
     const exitingEndPoint = await this.findByExpression({
-      concatenatedEndPoint: [
-        this.currentHttpRoute.entityName,
-        this.currentHttpRoute.path,
-        this.currentHttpRoute.method,
-      ].join('-'),
+      concatenatedEndPoint: this.getEndPointAddress(),
     });
+    return !!exitingEndPoint;
+  }
 
-    return exitingEndPoint.length > 0;
+  private getEndPointAddress(): any {
+    return [
+      `[${this.currentHttpRoute.entityName}]`,
+      `[${this.currentHttpRoute.path}]`,
+      `[${this.currentHttpRoute.method}]`,
+    ].join('-');
   }
 
   public async getAll(): Promise<EntitiesConfig[]> {
