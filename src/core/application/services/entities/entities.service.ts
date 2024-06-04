@@ -4,9 +4,13 @@ import { EntitiesConfig } from 'src/infrastructure/persistence/Sqlite/config/Ent
 import { InjectModel } from '@nestjs/sequelize';
 import { HttpRoutesDTO } from '../../DTO/inner/HttpRoutesDTO';
 import { EnumDatabase } from '../../enums/EnumDatabase';
+import { WhereOptions } from 'sequelize';
 
 @Injectable()
 export class EntitiesService {
+  private currentHttpRoute: HttpRoutesDTO;
+  private listHttpRoutes: HttpRoutesDTO[] = [];
+
   public constructor(
     @InjectModel(EntitiesConfig, EnumDatabase.mssqlConnection)
     private readonly exDbAPIEntities: typeof EntitiesConfig,
@@ -14,26 +18,51 @@ export class EntitiesService {
   ) {}
 
   public async syncHttpRoutes(): Promise<EntitiesConfig[]> {
-    const httpRoutesDTO: HttpRoutesDTO[] = this.httpRoutes.getRoutes();
-    for (const route of httpRoutesDTO) {
-      const entity = {
-        entityName: route.entityName,
-        entityRoute: route.path,
-        entityMethod: route.method,
-        concatenatedEndPoint: [route.entityName, route.path, route.method].join(
-          '-',
-        ),
-      };
-      try {
-        await this.exDbAPIEntities.create(entity);
-      } catch (error) {
-        console.log(error);
+    this.listHttpRoutes = this.httpRoutes.getRoutes();
+    for (this.currentHttpRoute of this.listHttpRoutes) {
+      const alreadyExits: boolean = await this.alreadyExits();
+      if (!alreadyExits) {
+        await this.createEndPoint();
       }
     }
     return await this.exDbAPIEntities.findAll();
   }
 
+  private async createEndPoint() {
+    try {
+      const entity = {
+        entityName: this.currentHttpRoute.entityName,
+        entityRoute: this.currentHttpRoute.path,
+        entityMethod: this.currentHttpRoute.method,
+        concatenatedEndPoint: [
+          `[${this.currentHttpRoute.entityName}]`,
+          `[${this.currentHttpRoute.path}]`,
+          `[${this.currentHttpRoute.method}]`,
+        ].join('-'),
+      };
+      await this.exDbAPIEntities.create(entity);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  private async alreadyExits(): Promise<boolean> {
+    const exitingEndPoint = await this.findByExpression({
+      concatenatedEndPoint: [
+        this.currentHttpRoute.entityName,
+        this.currentHttpRoute.path,
+        this.currentHttpRoute.method,
+      ].join('-'),
+    });
+
+    return exitingEndPoint.length > 0;
+  }
+
   public async getAll(): Promise<EntitiesConfig[]> {
     return this.exDbAPIEntities.findAll();
+  }
+
+  public async findByExpression(where: WhereOptions): Promise<object[]> {
+    return this.exDbAPIEntities.findAll({ where });
   }
 }
