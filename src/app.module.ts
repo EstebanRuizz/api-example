@@ -1,6 +1,6 @@
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
 import { ProductService } from './core/application/services/product/product.service';
@@ -33,26 +33,54 @@ import { InfrastructureService } from './core/application/services/infrastructur
 import { InfrastructureController } from './presentation/controllers/infrastructure/infrastructure.controller';
 import { SecurityApiRolesService } from './core/application/services/securtity-apiroles/security-apiroles.service';
 import { ExternalDBRolesService } from './core/application/services/roles/external-db-roles.service';
+import { Dialect } from 'sequelize';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    SequelizeModule.forRoot({
-      ...MssqlConfig.getSequelizeModuleOptions(),
+    SequelizeModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
       name: EnumDatabase.mssqlConnection,
+      useFactory: async (configService: ConfigService) => ({
+        dialect: configService.get<string>(
+          'external_database_dialect',
+        ) as Dialect,
+        host: configService.get<string>('external_database_host'),
+        port: parseInt(configService.get<string>('external_database_port'), 10),
+        username: configService.get<string>('external_database_username'),
+        password: configService.get<string>('external_database_password'),
+        database: configService.get<string>('external_database_database'),
+        models: [UserConfig, RoleConfig, EntitiesByRoleConfig, EntitiesConfig],
+        autoLoadModels: true,
+        synchronize: true,
+      }),
     }),
     SequelizeModule.forFeature(
       [UserConfig, RoleConfig, EntitiesByRoleConfig, EntitiesConfig],
       EnumDatabase.mssqlConnection,
     ),
-    SequelizeModule.forRoot({
-      ...SqliteConfig.getSequelizeModuleOptions(),
+
+    SequelizeModule.forRootAsync({
       name: EnumDatabase.sqliteConnection,
+      useFactory: async () => ({
+        dialect: 'sqlite',
+        storage: 'database.sqlite',
+        autoLoadModels: true,
+        synchronize: true,
+        models: [
+          EntitiesByRoleConfig,
+          UserJWTSessionConfig,
+          RoleConfig,
+          EntitiesConfig,
+        ],
+      }),
     }),
     SequelizeModule.forFeature(
-      [EntitiesByRoleConfig, UserJWTSessionConfig, RoleConfig],
+      [EntitiesByRoleConfig, UserJWTSessionConfig, RoleConfig, EntitiesConfig],
       EnumDatabase.sqliteConnection,
     ),
+
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
