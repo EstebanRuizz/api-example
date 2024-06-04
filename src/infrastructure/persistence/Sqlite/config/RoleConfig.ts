@@ -14,8 +14,8 @@ import { IRole } from 'src/core/domain/models/IRole';
 
 @Table
 export class RoleConfig extends Model<RoleConfig> implements IRole {
-  @Default(DataType.UUIDV4)
-  @Column({ primaryKey: true, type: DataType.UUIDV4 })
+  @PrimaryKey
+  @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4 })
   id: string;
 
   @Column({

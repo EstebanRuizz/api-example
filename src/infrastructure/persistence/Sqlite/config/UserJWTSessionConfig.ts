@@ -1,16 +1,5 @@
 import { IUserJWTSession } from 'src/core/domain/models/IUserJWTSession';
-import {
-  Model,
-  Index,
-  Table,
-  Column,
-  DataType,
-  HasMany,
-  BelongsTo,
-  ForeignKey,
-  PrimaryKey,
-  Default,
-} from 'sequelize-typescript';
+import { Model, Index, Table, Column, DataType } from 'sequelize-typescript';
 
 @Table
 export class UserJWTSessionConfig

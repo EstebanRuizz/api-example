@@ -15,8 +15,8 @@ import { IUser } from 'src/core/domain/models/IUser';
 
 @Table
 export class UserConfig extends Model<UserConfig> implements IUser {
-  @Default(DataType.UUIDV4)
-  @Column({ primaryKey: true, type: DataType.UUIDV4 })
+  @PrimaryKey
+  @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4 })
   id: string;
 
   @Column({

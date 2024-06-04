@@ -15,8 +15,7 @@ import { IEntities } from 'src/core/domain/models/IEntities';
 @Table
 export class EntitiesConfig extends Model<EntitiesConfig> implements IEntities {
   @PrimaryKey
-  @Default(DataType.UUIDV4)
-  @Column({ primaryKey: true, type: DataType.UUIDV4 })
+  @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4 })
   @Index({ name: 'PK__EntitiesConfig__3213E83FA17DC417', unique: true })
   id: string;
 

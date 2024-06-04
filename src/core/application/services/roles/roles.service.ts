@@ -6,8 +6,8 @@ import { RoleConfig } from 'src/infrastructure/persistence/Sqlite/config/RoleCon
 @Injectable()
 export class RolesService {
   public constructor(
-    @InjectModel(RoleConfig)
-    private roleModel: typeof RoleConfig,
+    @InjectModel(RoleConfig, 'sqliteConnection')
+    private readonly roleModel: typeof RoleConfig,
   ) {}
 
   public async getAll(): Promise<RoleConfig[]> {

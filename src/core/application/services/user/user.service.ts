@@ -7,7 +7,7 @@ import { UserDTO } from '../../DTO/UserDTO';
 export class UserService {
   constructor(
     @InjectModel(UserConfig)
-    private userModel: typeof UserConfig,
+    private readonly userModel: typeof UserConfig,
   ) {}
 
   findAll(): Promise<UserConfig[]> {
