@@ -28,17 +28,23 @@ export class InfrastructureService {
   ) {}
 
   public async createBaseInfrastructure(infrastructureDTO: InfrastructureDTO) {
-    await this.createAdminRole(infrastructureDTO);
-    await this.createUser(infrastructureDTO);
-    await this.syncEndPoints();
-    await this.grantPermissionsToAdminRole();
+    try {
+      await this.createAdminRole(infrastructureDTO);
+      await this.createUser(infrastructureDTO);
+      await this.syncEndPoints();
+      await this.grantPermissionsToAdminRole();
 
-    return {
-      user: this.user,
-      role: this.role,
-      entities: this.entities,
-      entitiesByRole: this.entitiesByRole,
-    };
+      return {
+        user: this.user,
+        role: this.role,
+        entities: this.entities,
+        entitiesByRole: this.entitiesByRole,
+      };
+    } catch (error) {
+      return {
+        error: 'something wrong happened when loading api-config',
+      };
+    }
   }
 
   private async createUser(infrastructureDTO: InfrastructureDTO) {

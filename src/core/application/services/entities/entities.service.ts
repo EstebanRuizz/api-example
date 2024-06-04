@@ -43,9 +43,12 @@ export class EntitiesService {
   }
 
   private async alreadyExits(): Promise<boolean> {
-    const exitingEndPoint = await this.findByExpression({
-      concatenatedEndPoint: this.getEndPointAddress(),
+    const exitingEndPoint = await this.exDbAPIEntities.findOne({
+      where: {
+        concatenatedEndPoint: this.getEndPointAddress(),
+      },
     });
+
     return !!exitingEndPoint;
   }
 
