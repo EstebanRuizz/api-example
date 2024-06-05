@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { RoleDTO } from '../../DTO/RoleDTO';
-import { RoleConfig } from 'src/infrastructure/persistence/Sqlite/config/RoleConfig';
 import { EnumDatabase } from '../../enums/EnumDatabase';
 import { WhereOptions } from 'sequelize';
+import { RoleConfig } from 'src/infrastructure/persistence/SqlServer/config/RoleConfig';
 
 @Injectable()
 export class ExternalDBRolesService {
