@@ -1,8 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { Get, Post, Param, Delete, Body } from '@nestjs/common';
 import { EntitiesByRoleService } from './../../../core/application/services/entities-by-role/entities-by-role.service';
-import { EntitiesByRoleConfig } from '../../../infrastructure/persistence/Sqlite/config/EntitiesByRoleConfig';
+
 import { EntitiesByRoleDTO } from 'src/core/application/DTO/EntitiesByRole';
+import { EntitiesByRoleConfig } from 'src/infrastructure/persistence/SqlServer/config/EntitiesByRoleConfig';
 
 @Controller('entity-by-role')
 export class EntityByRoleController {
