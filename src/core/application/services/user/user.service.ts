@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { UserConfig } from '../../../../infrastructure/persistence/Sqlite/config/UserConfig';
 import { UserDTO } from '../../DTO/UserDTO';
 import { EnumDatabase } from '../../enums/EnumDatabase';
 import { Sequelize, WhereOptions } from 'sequelize';
+import { UserConfig } from 'src/infrastructure/persistence/SqlServer/config/UserConfig';
 
 @Injectable()
 export class UserService {
