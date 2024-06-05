@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { HttpRoutesService } from '../http-routes/http-routes.service';
-import { EntitiesConfig } from 'src/infrastructure/persistence/Sqlite/config/EntitiesConfig';
 import { InjectModel } from '@nestjs/sequelize';
 import { HttpRoutesDTO } from '../../DTO/inner/HttpRoutesDTO';
 import { EnumDatabase } from '../../enums/EnumDatabase';
 import { WhereOptions } from 'sequelize';
+import { EntitiesConfig } from 'src/infrastructure/persistence/SqlServer/config/EntitiesConfig';
 
 @Injectable()
 export class EntitiesService {
@@ -52,12 +52,12 @@ export class EntitiesService {
     return !!exitingEndPoint;
   }
 
-  private getEndPointAddress(): any {
+  private getEndPointAddress(): string {
     return [
+      `[${this.currentHttpRoute.method}]`,
       `[${this.currentHttpRoute.entityName}]`,
       `[${this.currentHttpRoute.path}]`,
-      `[${this.currentHttpRoute.method}]`,
-    ].join('-');
+    ].join('');
   }
 
   public async getAll(): Promise<EntitiesConfig[]> {
