@@ -12,6 +12,7 @@ import { WhereOptions } from 'sequelize';
 import { UserService } from '../user/user.service';
 import { UserDTO } from '../../DTO/UserDTO';
 import { UserConfig } from 'src/infrastructure/persistence/Sqlite/config/UserConfig';
+import { LocalEntitiesService } from '../local-entities/local-entities.service';
 
 @Injectable()
 export class InfrastructureService {
@@ -24,29 +25,37 @@ export class InfrastructureService {
     private readonly userService: UserService,
     private readonly entitiesService: EntitiesService,
     private readonly externalDBRoles: ExternalDBRolesService,
+    private readonly localEntitiesService: LocalEntitiesService,
     private readonly entitiesByRoleService: EntitiesByRoleService,
   ) {}
 
   public async createBaseInfrastructure(infrastructureDTO: InfrastructureDTO) {
-    await this.createAdminRole(infrastructureDTO);
-    await this.createUser(infrastructureDTO);
-    await this.syncEndPoints();
-    await this.grantPermissionsToAdminRole();
+    try {
+      await this.createAdminRole(infrastructureDTO);
+      await this.createUser(infrastructureDTO);
+      await this.createBaseEndPoints();
+      await this.grantPermissionsToAdminRole();
 
-    return {
-      user: this.user,
-      role: this.role,
-      entities: this.entities,
-      entitiesByRole: this.entitiesByRole,
-    };
+      // await this.localEntitiesService.create()
+
+      return {
+        role: this.role,
+        user: this.user,
+        entities: this.entities,
+        entitiesByRole: this.entitiesByRole,
+      };
+    } catch (error) {
+      return {
+        error: 'something wrong happened when loading api-config',
+      };
+    }
   }
 
   private async createUser(infrastructureDTO: InfrastructureDTO) {
     const user: UserConfig[] = await this.userService.findByExpression({
       email: infrastructureDTO.userEmail,
     });
-
-    if (!user) {
+    if (!user.length) {
       const userDTO: UserDTO = {
         name: infrastructureDTO.userEmail,
         email: infrastructureDTO.userEmail,
@@ -81,7 +90,7 @@ export class InfrastructureService {
     this.entitiesByRole = await this.entitiesByRoleService.getAll();
   }
 
-  private async syncEndPoints() {
+  private async createBaseEndPoints() {
     this.entities = await this.entitiesService.syncHttpRoutes();
   }
 

@@ -34,6 +34,10 @@ import { InfrastructureController } from './presentation/controllers/infrastruct
 import { SecurityApiRolesService } from './core/application/services/securtity-apiroles/security-apiroles.service';
 import { ExternalDBRolesService } from './core/application/services/roles/external-db-roles.service';
 import { Dialect } from 'sequelize';
+import { LocalEntitiesByRoleService } from './core/application/services/local-entities-by-role/local-entities-by-role.service';
+import { LocalEntitiesService } from './core/application/services/local-entities/local-entities.service';
+import { LocalRoleService } from './core/application/services/local-role/local-role.service';
+import { LocalUserJwtSessionService } from './core/application/services/local-user-jwtsession/local-user-jwtsession.service';
 
 @Module({
   imports: [
@@ -89,22 +93,26 @@ import { Dialect } from 'sequelize';
   ],
   controllers: [
     UserController,
-    // EntityController,
-    // AuthController,
+    EntityController,
+    AuthController,
     RoleController,
     InfrastructureController,
-    // EntityByRoleController,
+    EntityByRoleController,
   ],
   providers: [
     // ProductService,
     UserService,
-    // AuthService,
+    AuthService,
     HttpRoutesService,
     ExternalDBRolesService,
     InfrastructureService,
     SecurityApiRolesService,
     EntitiesService,
     EntitiesByRoleService,
+    LocalEntitiesByRoleService,
+    LocalUserJwtSessionService,
+    LocalRoleService,
+    LocalEntitiesService,
     MssqlConfig.sequelizeProvider(),
   ],
 })
