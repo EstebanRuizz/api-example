@@ -7,10 +7,10 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { IUser } from 'src/core/domain/models/IUser';
-import { RoleConfig } from './RoleConfig';
+import { LocalRole } from './LocalRole';
 
 @Table
-export class UserConfig extends Model<UserConfig> implements IUser {
+export class LocalUser extends Model<LocalUser> implements IUser {
   @PrimaryKey
   @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4 })
   id: string;
@@ -30,7 +30,7 @@ export class UserConfig extends Model<UserConfig> implements IUser {
   })
   password: string;
 
-  @ForeignKey(() => RoleConfig)
+  @ForeignKey(() => LocalRole)
   @Column({
     type: DataType.UUID,
     allowNull: false,

@@ -2,8 +2,8 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
 import { IUserJWTSession } from 'src/core/domain/models/IUserJWTSession';
 
 @Table
-export class UserJWTSessionConfig
-  extends Model<UserJWTSessionConfig>
+export class LocalUserJWTSession
+  extends Model<LocalUserJWTSession>
   implements IUserJWTSession
 {
   @Column({

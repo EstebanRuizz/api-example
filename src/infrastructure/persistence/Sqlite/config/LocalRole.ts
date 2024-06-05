@@ -8,7 +8,7 @@ import {
 import { IRole } from 'src/core/domain/models/IRole';
 
 @Table
-export class RoleConfig extends Model<RoleConfig> implements IRole {
+export class LocalRole extends Model<LocalRole> implements IRole {
   @PrimaryKey
   @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4 })
   id: string;

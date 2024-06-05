@@ -9,7 +9,7 @@ import {
 import { IEntities } from 'src/core/domain/models/IEntities';
 
 @Table
-export class EntitiesConfig extends Model<EntitiesConfig> implements IEntities {
+export class LocalEntities extends Model<LocalEntities> implements IEntities {
   @PrimaryKey
   @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4 })
   @Index({ name: 'PK__EntitiesConfig__3213E83FA17DC417', unique: true })

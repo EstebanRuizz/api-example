@@ -7,11 +7,12 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { IEntitiesByRole } from 'src/core/domain/models/IEntitiesByRole';
-import { EntitiesConfig } from './EntitiesConfig';
-import { RoleConfig } from './RoleConfig';
+
+import { LocalEntities } from './LocalEntities';
+import { LocalRole } from './LocalRole';
 
 @Table
-export class EntitiesByRoleConfig
+export class LocalEntitiesByRole
   extends Model<IEntitiesByRole>
   implements IEntitiesByRole
 {
@@ -19,14 +20,14 @@ export class EntitiesByRoleConfig
   @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4 })
   id: string;
 
-  @ForeignKey(() => RoleConfig)
+  @ForeignKey(() => LocalRole)
   @Column({
     type: DataType.UUID,
     allowNull: false,
   })
   roleFK: string;
 
-  @ForeignKey(() => EntitiesConfig)
+  @ForeignKey(() => LocalEntities)
   @Column({
     type: DataType.UUID,
     allowNull: false,
