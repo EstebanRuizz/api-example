@@ -1,10 +1,12 @@
 import { EntitiesByRoleDTO } from './../../DTO/EntitiesByRole';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { EntitiesByRoleConfig } from 'src/infrastructure/persistence/Sqlite/config/EntitiesByRoleConfig';
+
 import { EnumDatabase } from '../../enums/EnumDatabase';
 import { WhereOptions } from 'sequelize';
-import { EntitiesConfig } from 'src/infrastructure/persistence/Sqlite/config/EntitiesConfig';
+import { EntitiesByRoleConfig } from 'src/infrastructure/persistence/SqlServer/config/EntitiesByRoleConfig';
+import { EntitiesConfig } from 'src/infrastructure/persistence/SqlServer/config/EntitiesConfig';
+
 
 @Injectable()
 export class EntitiesByRoleService {
