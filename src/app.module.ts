@@ -1,43 +1,45 @@
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { SequelizeModule } from '@nestjs/sequelize';
 
-import { ProductService } from './core/application/services/product/product.service';
-import { UserService } from './core/application/services/user/user.service';
 import { AuthService } from './core/application/services/auth/auth.service';
-import { HttpRoutesService } from './core/application/services/http-routes/http-routes.service';
 import { EntitiesByRoleService } from './core/application/services/entities-by-role/entities-by-role.service';
 import { EntitiesService } from './core/application/services/entities/entities.service';
+import { HttpRoutesService } from './core/application/services/http-routes/http-routes.service';
+import { UserService } from './core/application/services/user/user.service';
 
-import { UserController } from './presentation/controllers/user/user.controller';
 import { AuthController } from './presentation/controllers/auth/auth.controller';
-import { RoleController } from './presentation/controllers/role/role.controller';
 import { EntityByRoleController } from './presentation/controllers/entity-by-role/entity-by-role.controller';
 import { EntityController } from './presentation/controllers/entity/entity.controller';
+import { RoleController } from './presentation/controllers/role/role.controller';
+import { UserController } from './presentation/controllers/user/user.controller';
 
 import { LoggerMiddleware } from './presentation/middleware/LoggerMiddleware';
 
-import { SqliteConfig } from './infrastructure/persistence/Sqlite/SqliteConfig';
 import { MssqlConfig } from './infrastructure/persistence/SqlServer/MssqlConfig';
 
 import { jwtConstants } from './infrastructure/auth/constants';
 
-import { UserConfig } from './infrastructure/persistence/Sqlite/config/UserConfig';
-import { RoleConfig } from './infrastructure/persistence/Sqlite/config/RoleConfig';
-import { EntitiesByRoleConfig } from './infrastructure/persistence/Sqlite/config/EntitiesByRoleConfig';
-import { EntitiesConfig } from './infrastructure/persistence/Sqlite/config/EntitiesConfig';
-import { UserJWTSessionConfig } from './infrastructure/persistence/Sqlite/config/UserJWTSessionConfig';
+import { Dialect } from 'sequelize';
 import { EnumDatabase } from './core/application/enums/EnumDatabase';
 import { InfrastructureService } from './core/application/services/infrastructure/infrastructure.service';
-import { InfrastructureController } from './presentation/controllers/infrastructure/infrastructure.controller';
-import { SecurityApiRolesService } from './core/application/services/securtity-apiroles/security-apiroles.service';
+import { LocalEntitiesByRoleService } from './core/application/services/localDatabase/local-entities-by-role/local-entities-by-role.service';
+import { LocalEntitiesService } from './core/application/services/localDatabase/local-entities/local-entities.service';
+import { LocalRoleService } from './core/application/services/localDatabase/local-role/local-role.service';
+import { LocalUserJwtSessionService } from './core/application/services/localDatabase/local-user-jwtsession/local-user-jwtsession.service';
 import { ExternalDBRolesService } from './core/application/services/roles/external-db-roles.service';
-import { Dialect } from 'sequelize';
-import { LocalEntitiesByRoleService } from './core/application/services/local-entities-by-role/local-entities-by-role.service';
-import { LocalEntitiesService } from './core/application/services/local-entities/local-entities.service';
-import { LocalRoleService } from './core/application/services/local-role/local-role.service';
-import { LocalUserJwtSessionService } from './core/application/services/local-user-jwtsession/local-user-jwtsession.service';
+import { SecurityApiRolesService } from './core/application/services/securtity-apiroles/security-apiroles.service';
+import { LocalEntities } from './infrastructure/persistence/Sqlite/config/LocalEntities';
+import { LocalEntitiesByRole } from './infrastructure/persistence/Sqlite/config/LocalEntitiesByRole';
+import { LocalRole } from './infrastructure/persistence/Sqlite/config/LocalRole';
+import { LocalUser } from './infrastructure/persistence/Sqlite/config/LocalUser';
+import { EntitiesByRoleConfig } from './infrastructure/persistence/SqlServer/config/EntitiesByRoleConfig';
+import { EntitiesConfig } from './infrastructure/persistence/SqlServer/config/EntitiesConfig';
+import { RoleConfig } from './infrastructure/persistence/SqlServer/config/RoleConfig';
+import { UserConfig } from './infrastructure/persistence/SqlServer/config/UserConfig';
+import { InfrastructureController } from './presentation/controllers/infrastructure/infrastructure.controller';
+import { LocalUserJWTSession } from './infrastructure/persistence/Sqlite/config/LocalUserJWTSession';
 
 @Module({
   imports: [
@@ -69,19 +71,26 @@ import { LocalUserJwtSessionService } from './core/application/services/local-us
       name: EnumDatabase.sqliteConnection,
       useFactory: async () => ({
         dialect: 'sqlite',
-        storage: 'database.sqlite',
+        storage: './database.sqlite',
         autoLoadModels: true,
         synchronize: true,
         models: [
-          EntitiesByRoleConfig,
-          UserJWTSessionConfig,
-          RoleConfig,
-          EntitiesConfig,
+          LocalUser,
+          LocalRole,
+          LocalEntities,
+          LocalEntitiesByRole,
+          LocalUserJWTSession,
         ],
       }),
     }),
     SequelizeModule.forFeature(
-      [EntitiesByRoleConfig, UserJWTSessionConfig, RoleConfig, EntitiesConfig],
+      [
+        LocalUser,
+        LocalRole,
+        LocalEntities,
+        LocalEntitiesByRole,
+        LocalUserJWTSession,
+      ],
       EnumDatabase.sqliteConnection,
     ),
 
@@ -100,7 +109,6 @@ import { LocalUserJwtSessionService } from './core/application/services/local-us
     EntityByRoleController,
   ],
   providers: [
-    // ProductService,
     UserService,
     AuthService,
     HttpRoutesService,
