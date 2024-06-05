@@ -1,18 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { EntitiesConfig } from 'src/infrastructure/persistence/Sqlite/config/EntitiesConfig';
-import { RoleConfig } from 'src/infrastructure/persistence/Sqlite/config/RoleConfig';
+import { WhereOptions } from 'sequelize';
+import { EntitiesByRoleConfig } from 'src/infrastructure/persistence/SqlServer/config/EntitiesByRoleConfig';
+import { EntitiesConfig } from 'src/infrastructure/persistence/SqlServer/config/EntitiesConfig';
+import { RoleConfig } from 'src/infrastructure/persistence/SqlServer/config/RoleConfig';
+import { UserConfig } from 'src/infrastructure/persistence/SqlServer/config/UserConfig';
+import { EntitiesByRoleDTO } from '../../DTO/EntitiesByRole';
 import { InfrastructureDTO } from '../../DTO/http/infrastructureDTO';
 import { RoleDTO } from '../../DTO/RoleDTO';
-import { EntitiesService } from '../entities/entities.service';
-import { ExternalDBRolesService } from '../roles/external-db-roles.service';
-import { EntitiesByRoleDTO } from '../../DTO/EntitiesByRole';
-import { EntitiesByRoleService } from '../entities-by-role/entities-by-role.service';
-import { EntitiesByRoleConfig } from 'src/infrastructure/persistence/Sqlite/config/EntitiesByRoleConfig';
-import { WhereOptions } from 'sequelize';
-import { UserService } from '../user/user.service';
 import { UserDTO } from '../../DTO/UserDTO';
-import { UserConfig } from 'src/infrastructure/persistence/Sqlite/config/UserConfig';
-import { LocalEntitiesService } from '../local-entities/local-entities.service';
+import { EntitiesByRoleService } from '../entities-by-role/entities-by-role.service';
+import { EntitiesService } from '../entities/entities.service';
+import { LocalEntitiesByRoleService } from '../localDatabase/local-entities-by-role/local-entities-by-role.service';
+import { LocalEntitiesService } from '../localDatabase/local-entities/local-entities.service';
+import { LocalRoleService } from '../localDatabase/local-role/local-role.service';
+import { ExternalDBRolesService } from '../roles/external-db-roles.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class InfrastructureService {
@@ -25,8 +27,10 @@ export class InfrastructureService {
     private readonly userService: UserService,
     private readonly entitiesService: EntitiesService,
     private readonly externalDBRoles: ExternalDBRolesService,
-    private readonly localEntitiesService: LocalEntitiesService,
     private readonly entitiesByRoleService: EntitiesByRoleService,
+    private readonly localRoleService: LocalRoleService,
+    private readonly localEntitiesService: LocalEntitiesService,
+    private readonly localEntitiesByRoleService: LocalEntitiesByRoleService,
   ) {}
 
   public async createBaseInfrastructure(infrastructureDTO: InfrastructureDTO) {
@@ -36,8 +40,9 @@ export class InfrastructureService {
       await this.createBaseEndPoints();
       await this.grantPermissionsToAdminRole();
 
-      // await this.localEntitiesService.create()
-
+      await this.syncLocalRole();
+      await this.syncLocalEntities();
+      await this.syncLocalEntitiesByRole();
       return {
         role: this.role,
         user: this.user,
@@ -45,10 +50,23 @@ export class InfrastructureService {
         entitiesByRole: this.entitiesByRole,
       };
     } catch (error) {
+      console.log(error);
       return {
         error: 'something wrong happened when loading api-config',
       };
     }
+  }
+
+  private async syncLocalRole(): Promise<void> {
+    await this.localRoleService.create(this.role);
+  }
+
+  private async syncLocalEntities(): Promise<void> {
+    await this.localEntitiesService.bulkCreate(this.entities);
+  }
+
+  private async syncLocalEntitiesByRole(): Promise<void> {
+    await this.localEntitiesByRoleService.bulkCreate(this.entitiesByRole);
   }
 
   private async createUser(infrastructureDTO: InfrastructureDTO) {
