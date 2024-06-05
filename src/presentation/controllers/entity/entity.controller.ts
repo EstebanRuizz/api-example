@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { EntitiesService } from '../../../core/application/services/entities/entities.service';
-import { EntitiesConfig } from 'src/infrastructure/persistence/Sqlite/config/EntitiesConfig';
+import { EntitiesConfig } from 'src/infrastructure/persistence/SqlServer/config/EntitiesConfig';
 
 @Controller('entity')
 export class EntityController {
