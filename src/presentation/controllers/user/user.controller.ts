@@ -9,10 +9,10 @@ import {
 } from '@nestjs/common';
 import { UserDTO } from '../../../core/application/DTO/UserDTO';
 import { UserService } from '../../../core/application/services/user/user.service';
-import { UserConfig } from '../../../infrastructure/persistence/Sqlite/config/UserConfig';
 import { AuthGuard } from 'src/presentation/guards/auth/auth.guard';
 import { HttpRoutesService } from 'src/core/application/services/http-routes/http-routes.service';
 import { EntitiesService } from 'src/core/application/services/entities/entities.service';
+import { UserConfig } from 'src/infrastructure/persistence/SqlServer/config/UserConfig';
 
 @Controller('user')
 export class UserController {
@@ -22,6 +22,7 @@ export class UserController {
     private readonly entitiesService: EntitiesService,
   ) {}
 
+  // @UseGuards(AuthGuard)
   @Get('httpRoutes')
   public async getHttpRoutes(): Promise<object> {
     await this.entitiesService.syncHttpRoutes();
