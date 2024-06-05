@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { UserJWTSessionConfig } from 'src/infrastructure/persistence/Sqlite/config/UserJWTSessionConfig';
+import { UserJWTSessionConfig } from 'src/infrastructure/persistence/SqlServer/config/UserJWTSessionConfig';
 
 @Injectable()
 export class UserJwtSessionService {
