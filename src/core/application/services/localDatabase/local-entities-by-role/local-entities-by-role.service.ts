@@ -5,6 +5,8 @@ import { EntitiesByRoleDTO } from '../../../DTO/EntitiesByRole';
 import { PaginationDTO } from '../../../DTO/inner/PaginationDTO';
 import { EnumDatabase } from '../../../enums/EnumDatabase';
 
+import { WhereOptions, FindOptions } from 'sequelize';
+
 @Injectable()
 export class LocalEntitiesByRoleService {
   private currentEntitiesByRole: EntitiesByRoleDTO;
@@ -98,5 +100,17 @@ export class LocalEntitiesByRoleService {
     });
 
     return !!exitingEndPoint;
+  }
+
+  public async findOneWhereRoleEntity(
+    roleId: string,
+    endPointId: string,
+  ): Promise<LocalEntitiesByRole | null> {
+    return this.entitiesByRole.findOne({
+      where: {
+        roleFK: roleId,
+        entityFK: endPointId,
+      },
+    });
   }
 }

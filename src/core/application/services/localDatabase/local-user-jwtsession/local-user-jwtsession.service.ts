@@ -21,4 +21,15 @@ export class LocalUserJwtSessionService {
       roleFK: user.roleFK,
     });
   }
+
+  public async getByJwtSessionId(
+    jwtSessionId: string,
+  ): Promise<LocalUserJWTSession> {
+    return this.localUserJWTSessionModel.findOne({
+      where: {
+        jwtSessionId: jwtSessionId,
+      },
+      raw: true,
+    });
+  }
 }

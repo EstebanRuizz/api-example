@@ -7,6 +7,7 @@ import { CreateEntitiesDTO } from '../../../DTO/inner/LocalEntities/CreateEntiti
 import { UpdateEntitiesDTO } from '../../../DTO/inner/LocalEntities/UpdateEntitiesDTO';
 import { LocalEntities } from 'src/infrastructure/persistence/Sqlite/config/LocalEntities';
 import { HttpRoutesDTO } from '../../../DTO/inner/HttpRoutesDTO';
+import { WhereOptions } from 'sequelize';
 
 @Injectable()
 export class LocalEntitiesService
@@ -99,5 +100,14 @@ export class LocalEntitiesService
     });
 
     return !!exitingEndPoint;
+  }
+
+  public async findByEndPoint(endPoint: string): Promise<LocalEntities> {
+    return await this.entities.findOne({
+      where: {
+        concatenatedEndPoint: endPoint,
+      },
+      raw: true,
+    });
   }
 }

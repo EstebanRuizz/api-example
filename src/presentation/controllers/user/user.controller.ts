@@ -29,12 +29,13 @@ export class UserController {
     return this.httpRoutes.getRoutes();
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get()
   public async findAll(): Promise<UserConfig[]> {
     return this.userService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string): Promise<UserConfig> {
     return this.userService.findOne(id);

@@ -57,7 +57,7 @@ export class EntitiesService {
       `[${this.currentHttpRoute.method}]`,
       `[${this.currentHttpRoute.entityName}]`,
       `[${this.currentHttpRoute.path}]`,
-    ].join('');
+    ].join('.');
   }
 
   public async getAll(): Promise<EntitiesConfig[]> {
