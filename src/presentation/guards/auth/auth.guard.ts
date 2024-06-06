@@ -22,6 +22,7 @@ export class AuthGuard implements CanActivate {
   private currentPayload: PayloadDTO;
   private currentContext: ExecutionContext;
   private localEntityEndPoint: LocalEntities;
+  private localUserJWTSession: LocalUserJWTSession;
 
   constructor(
     private readonly reflector: Reflector,
@@ -34,8 +35,6 @@ export class AuthGuard implements CanActivate {
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     this.currentContext = context;
-    this.logEndPointDetails();
-
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
@@ -45,8 +44,20 @@ export class AuthGuard implements CanActivate {
 
     await this.verifyTokenSign(token, request);
     await this.verifyAuthorization();
+    await this.verifyRolePermissionEndPoint();
 
     return true;
+  }
+
+  private async verifyRolePermissionEndPoint(): Promise<void> {
+    const roleByEntity =
+      await this.localEntitiesByRoleService.findOneWhereRoleEntity(
+        this.localUserJWTSession.roleFK,
+        this.localEntityEndPoint.id,
+      );
+    if (!roleByEntity) {
+      throw new NoAuthTokenException();
+    }
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
@@ -71,12 +82,8 @@ export class AuthGuard implements CanActivate {
     }
   }
 
-  private logEndPointDetails(): void {
-    console.log(this.getEndPointName());
-  }
-
   private async verifyAuthorization(): Promise<void> {
-    const JWTSession: LocalUserJWTSession =
+    this.localUserJWTSession =
       await this.localUserJwtSessionService.getByJwtSessionId(
         this.currentPayload.jwtSessionId.toString(),
       );
@@ -85,7 +92,7 @@ export class AuthGuard implements CanActivate {
       this.getEndPointName(),
     );
 
-    if (!this.localEntityEndPoint && !JWTSession) {
+    if (!this.localEntityEndPoint || !this.localUserJWTSession) {
       throw new NoAuthTokenException();
     }
   }
